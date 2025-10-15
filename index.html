@@ -43,30 +43,7 @@
                     <h2><i class="fas fa-list-alt"></i> 解析结果</h2>
                     <div class="result-container">
                         <div class="video-info">
-                            <div class="info-item">
-                                <h3>视频标题</h3>
-                                <div class="copy-container">
-                                    <p id="video-title" class="copyable-text"></p>
-                                    <button class="copy-btn" data-target="video-title"><i class="fas fa-copy"></i></button>
-                                </div>
-                            </div>
-                            
-                            <div class="info-item">
-                                <h3>视频链接</h3>
-                                <div class="copy-container">
-                                    <p id="video-url" class="copyable-text"></p>
-                                    <button class="copy-btn" data-target="video-url"><i class="fas fa-copy"></i></button>
-                                </div>
-                            </div>
-                            
-                            <div class="info-item">
-                                <h3>封面链接</h3>
-                                <div class="copy-container">
-                                    <p id="cover-url" class="copyable-text"></p>
-                                    <button class="copy-btn" data-target="cover-url"><i class="fas fa-copy"></i></button>
-                                </div>
-                            </div>
-                            
+                            <!-- 预览区域置顶，按钮位于各自预览下方 -->
                             <div class="preview-container">
                                 <div class="cover-preview">
                                     <h4><i class="fas fa-image"></i> 封面预览</h4>
@@ -81,6 +58,31 @@
                                         <video id="video-preview" controls></video>
                                     </div>
                                     <button id="download-video" class="download-button"><i class="fas fa-download"></i> 下载视频</button>
+                                </div>
+                            </div>
+
+                            <!-- 其后展示标题与链接 -->
+                            <div class="info-item">
+                                <h3>视频标题</h3>
+                                <div class="copy-container">
+                                    <p id="video-title" class="copyable-text"></p>
+                                    <button class="copy-btn" data-target="video-title"><i class="fas fa-copy"></i></button>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <h3>视频链接</h3>
+                                <div class="copy-container">
+                                    <p id="video-url" class="copyable-text"></p>
+                                    <button class="copy-btn" data-target="video-url"><i class="fas fa-copy"></i></button>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <h3>封面链接</h3>
+                                <div class="copy-container">
+                                    <p id="cover-url" class="copyable-text"></p>
+                                    <button class="copy-btn" data-target="cover-url"><i class="fas fa-copy"></i></button>
                                 </div>
                             </div>
                         </div>

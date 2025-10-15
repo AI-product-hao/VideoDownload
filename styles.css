@@ -282,6 +282,18 @@ textarea:focus {
     flex-direction: column;
 }
 
+/* 顶部下载操作栏 */
+.download-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+}
+
+.download-actions .download-button {
+    padding: 10px 18px;
+}
+
 /* 信息项 */
 .info-item {
     margin-bottom: 20px;
@@ -361,23 +373,19 @@ textarea:focus {
 
 .preview-box {
     width: 100%;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     border-radius: var(--border-radius);
     overflow: hidden;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     background-color: #000;
     position: relative;
+    height: 200px; /* 预览高度减半，更紧凑 */
 }
 
-#cover-preview {
+#cover-preview, #video-preview {
     width: 100%;
-    height: auto;
-    display: block;
-}
-
-#video-preview {
-    width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: contain; /* 在固定高度内完整展示 */
     display: block;
 }
 
