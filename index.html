@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视频去水印下载</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div id="password-modal" class="modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-lock"></i> 请输入访问密码</h2>
+            <div class="input-group">
+                <input type="password" id="password-input" placeholder="请输入密码">
+                <button id="submit-password">确认</button>
+            </div>
+            <p id="password-error" class="error-message"></p>
+        </div>
+    </div>
+
+    <div id="main-content" class="hidden">
+        <header>
+            <div class="header-content">
+                <h1><i class="fas fa-video"></i> 视频去水印下载工具</h1>
+                <div class="header-decoration"></div>
+            </div>
+        </header>
+        
+        <main>
+            <div class="container">
+                <div class="input-section">
+                    <h2><i class="fas fa-link"></i> 粘贴分享链接</h2>
+                    <textarea id="share-link" placeholder="请粘贴分享链接，例如：https://v.douyin.com/ZOqdo9qsYuY/"></textarea>
+                    <button id="parse-button"><i class="fas fa-search"></i> 开始解析</button>
+                    <div id="loading" class="hidden">
+                        <div class="spinner"></div>
+                        <p>正在解析中，请稍候...</p>
+                    </div>
+                </div>
+                
+                <div id="result-section" class="hidden">
+                    <h2><i class="fas fa-list-alt"></i> 解析结果</h2>
+                    <div class="result-container">
+                        <div class="video-info">
+                            <div class="info-item">
+                                <h3>视频标题</h3>
+                                <div class="copy-container">
+                                    <p id="video-title" class="copyable-text"></p>
+                                    <button class="copy-btn" data-target="video-title"><i class="fas fa-copy"></i></button>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <h3>视频链接</h3>
+                                <div class="copy-container">
+                                    <p id="video-url" class="copyable-text"></p>
+                                    <button class="copy-btn" data-target="video-url"><i class="fas fa-copy"></i></button>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <h3>封面链接</h3>
+                                <div class="copy-container">
+                                    <p id="cover-url" class="copyable-text"></p>
+                                    <button class="copy-btn" data-target="cover-url"><i class="fas fa-copy"></i></button>
+                                </div>
+                            </div>
+                            
+                            <div class="preview-container">
+                                <div class="cover-preview">
+                                    <h4><i class="fas fa-image"></i> 封面预览</h4>
+                                    <div class="preview-box">
+                                        <img id="cover-preview" src="" alt="视频封面">
+                                    </div>
+                                    <button id="download-cover" class="download-button"><i class="fas fa-download"></i> 下载封面</button>
+                                </div>
+                                <div class="video-preview">
+                                    <h4><i class="fas fa-film"></i> 视频预览</h4>
+                                    <div class="preview-box">
+                                        <video id="video-preview" controls></video>
+                                    </div>
+                                    <button id="download-video" class="download-button"><i class="fas fa-download"></i> 下载视频</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <div class="footer-content">
+                <p><i class="fas fa-code"></i> © 2023 视频去水印下载工具 - 仅供学习交流使用</p>
+                <div class="footer-decoration"></div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="toast" class="hidden">已复制到剪贴板</div>
+    <script src="script.js"></script>
+</body>
+</html>
