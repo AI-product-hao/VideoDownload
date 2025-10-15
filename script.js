@@ -120,6 +120,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         const extractedUrl = matches[0];
+
+        // 清空之前解析的结果，避免旧内容残留
+        videoTitle.textContent = '';
+        videoUrl.textContent = '';
+        coverUrl.textContent = '';
+        coverPreview.src = '';
+        videoPreview.src = '';
         
         // Show loading indicator
         loadingIndicator.classList.remove('hidden');
@@ -148,19 +155,55 @@ document.addEventListener('DOMContentLoaded', function() {
                 videoUrl.textContent = videoLink;
                 coverUrl.textContent = coverLink;
                 
-                // Set cover preview
+                // Set cover preview（使用 Blob 解决跨域及防盗链）
                 if (coverLink) {
-                    coverPreview.src = coverLink;
-                    downloadCover.disabled = false;
+                    fetch(coverLink, {
+                        method: 'GET',
+                        cache: 'no-cache',
+                        credentials: 'omit',
+                        referrerPolicy: 'no-referrer'
+                    })
+                        .then(res => {
+                            if (!res.ok) throw new Error(`封面加载错误: ${res.status}`);
+                            return res.blob();
+                        })
+                        .then(blob => {
+                            const blobUrl = URL.createObjectURL(blob);
+                            coverPreview.src = blobUrl;
+                            downloadCover.disabled = false;
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            coverPreview.src = '';
+                            downloadCover.disabled = true;
+                        });
                 } else {
                     coverPreview.src = '';
                     downloadCover.disabled = true;
                 }
-                
-                // Set video preview
+
+                // Set video preview（使用 Blob 解决跨域及防盗链）
                 if (videoLink) {
-                    videoPreview.src = videoLink;
-                    downloadVideo.disabled = false;
+                    fetch(videoLink, {
+                        method: 'GET',
+                        cache: 'no-cache',
+                        credentials: 'omit',
+                        referrerPolicy: 'no-referrer'
+                    })
+                        .then(res => {
+                            if (!res.ok) throw new Error(`视频加载错误: ${res.status}`);
+                            return res.blob();
+                        })
+                        .then(blob => {
+                            const blobUrl = URL.createObjectURL(blob);
+                            videoPreview.src = blobUrl;
+                            downloadVideo.disabled = false;
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            videoPreview.src = '';
+                            downloadVideo.disabled = true;
+                        });
                 } else {
                     videoPreview.src = '';
                     downloadVideo.disabled = true;
@@ -198,21 +241,71 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Function to download resources
+    // Function to download resources（使用 Blob 并移除 Referrer）
     function downloadResource(url, filename) {
-        // Create a temporary anchor element
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        a.style.display = 'none';
-        
-        // Add to document, click it, and remove it
-        document.body.appendChild(a);
-        a.click();
-        
-        // Clean up
-        setTimeout(() => {
-            document.body.removeChild(a);
-        }, 100);
+        let contentType = '';
+        fetch(url, {
+            method: 'GET',
+            cache: 'no-cache',
+            credentials: 'omit',
+            referrerPolicy: 'no-referrer'
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`网络错误: ${response.status}`);
+                }
+                contentType = response.headers.get('content-type') || '';
+                return response.blob();
+            })
+            .then(blob => {
+                const blobUrl = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = filename || inferFilename(url, contentType) || '下载文件';
+                a.style.display = 'none';
+                a.rel = 'noopener noreferrer';
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(blobUrl);
+                }, 100);
+            })
+            .catch(error => {
+                console.error('下载资源时出错:', error);
+                // 回退方案：直接打开新标签，用户可手动另存为
+                try {
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.target = '_blank';
+                    a.rel = 'noopener noreferrer';
+                    a.style.display = 'none';
+                    document.body.appendChild(a);
+                    a.click();
+                    setTimeout(() => {
+                        document.body.removeChild(a);
+                    }, 100);
+                } catch (_) {
+                    alert('下载失败，请稍后重试！');
+                }
+            });
+    }
+
+    function inferFilename(url, contentType) {
+        const urlName = (() => {
+            try {
+                const u = new URL(url);
+                const pathname = u.pathname.split('/').pop() || '';
+                return pathname.split('?')[0];
+            } catch (_) {
+                return '';
+            }
+        })();
+        if (urlName) return urlName;
+        if (contentType.includes('image/jpeg')) return '封面.jpg';
+        if (contentType.includes('image/png')) return '封面.png';
+        if (contentType.includes('image/webp')) return '封面.webp';
+        if (contentType.includes('video/mp4')) return '视频.mp4';
+        return '';
     }
 });
